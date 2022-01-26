@@ -6,11 +6,22 @@ describe("Cart features", () => {
 
     test('add to cart', async () => {
         await page.goto(process.env.TESTED_WEBSITE);
-        await page.waitForSelector('my_login_selector');
-        await page.type('my_login_selector', process.env.TEST_LOGIN);
-        await page.type('my_password_selector', process.env.TEST_PASSWORD);
-
+        await page.waitForSelector('#user-name');
+        await page.type('#user-name', process.env.TEST_LOGIN);
+        await page.waitForSelector('#password');
+        await page.type('#password', process.env.TEST_PASSWORD);
+        await page.waitForSelector('#login-button');
+        await page.click('#login-button');
         // à compléter
+        await page.waitForSelector('#add-to-cart-sauce-labs-backpack');
+        await page.click('#add-to-cart-sauce-labs-backpack');
+        await page.click('.shopping_cart_link');
+
+        await page.waitForSelector('.cart_list');
+
+        const html = await page.$eval('body', e => e.innerHTML);
+        expect(html).toContain("inventory_item_name");
+        await page.click('#remove-sauce-labs-backpack');
 
     }, timeout);
 
